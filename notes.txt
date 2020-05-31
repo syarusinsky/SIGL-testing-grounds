@@ -1,0 +1,18 @@
+Current Issues:
+
+Todos 2D:
+	1. Sprite blitting (with scaling and rotation)
+
+Backlog 2D:
+	1. Ellipses
+
+Todos 3D:
+	1. Model importing
+
+Font File Format:
+	- Need a python script to generate font files that are small as possible
+
+	Files Need:
+		- A mapping of character to glyph
+		- A mapping of character width to glyph (not height, since that should be universal)
+		- A bit-per-pixel bitmap of each character (this will keep file as small as possible)

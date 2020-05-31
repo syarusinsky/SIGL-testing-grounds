@@ -1,0 +1,3 @@
+[submodule "SIGL"]
+	path = SIGL
+	url = https://github.com/syarusinsky/SIGL.git
