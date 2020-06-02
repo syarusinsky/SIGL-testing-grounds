@@ -11,7 +11,7 @@
 // PS1 resolution: 640, 480 ARMor8 resolution: 128, 64
 #define SCREEN_WIDTH  640
 #define SCREEN_HEIGHT 480
-#define SCREEN_COLOR_FORMAT CP_FORMAT::RGB_24BIT
+#define SCREEN_COLOR_FORMAT CP_FORMAT::MONOCHROME_1BIT
 
 #define FONT_FILE_SIZE 138
 
@@ -71,7 +71,7 @@ static void activate (GtkApplication* app, gpointer user_data)
 	surface = new SurfaceTest( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_COLOR_FORMAT );
 
 	// get access to pixels in framebuffer
-	FrameBuffer* fb = surface->getFrameBuffer();
+	const FrameBuffer* fb = surface->getFrameBuffer();
 	my_pixels = surface->getFrameBuffer()->getPixels();
 
 	// load image into pixbuf and error check

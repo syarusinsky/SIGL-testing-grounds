@@ -1,7 +1,6 @@
 #include "SurfaceTest.hpp"
 
 #include <math.h>
-#include <iostream>
 
 #include "Graphics.hpp"
 
@@ -37,11 +36,10 @@ float incr = 0.01f;
 
 SurfaceTest::SurfaceTest (unsigned int width, unsigned int height, const CP_FORMAT& format) :
 	Surface (width, height, format),
-	m_TestSprite( 50, 50, format )
+	m_TestSprite( 50, 50, CP_FORMAT::MONOCHROME_1BIT )
 {
 	m_Graphics->setColor( 1.0f, 1.0f, 1.0f );
 	m_Graphics->setFont( my_font_ptr );
-	// m_Graphics->
 }
 
 SurfaceTest::~SurfaceTest()
@@ -240,4 +238,13 @@ void SurfaceTest::draw()
 	textY += textYMov;
 	if ( textX > 1.2f || textX < -0.5f) textXMov = textXMov * -1.0f;
 	if ( textY < -0.2f || textY > 1.0f ) textYMov = textYMov * -1.0f;
+
+	m_Graphics->setFrameBuffer( &m_TestSprite );
+	m_Graphics->setColor( 1.0f, 1.0f, 1.0f );
+	m_Graphics->fill();
+	m_Graphics->setColor( 0.0f, 0.0f, 0.0f );
+	m_Graphics->drawCircleFilled( 0.5f, 0.5f, 0.2f );
+
+	m_Graphics->setFrameBuffer( m_FrameBuffer );
+	m_Graphics->drawSprite( 0.5f, 0.5f, m_TestSprite );
 }
