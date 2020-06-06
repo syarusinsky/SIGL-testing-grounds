@@ -2,6 +2,7 @@
 
 #include "SurfaceTest.hpp"
 #include "Font.hpp"
+#include "Sprite.hpp"
 #include "FrameBuffer.hpp"
 
 #include <iostream>
@@ -11,9 +12,11 @@
 // PS1 resolution: 640, 480 ARMor8 resolution: 128, 64
 #define SCREEN_WIDTH  640
 #define SCREEN_HEIGHT 480
-#define SCREEN_COLOR_FORMAT CP_FORMAT::MONOCHROME_1BIT
+#define SCREEN_COLOR_FORMAT CP_FORMAT::RGB_24BIT
 
 #define FONT_FILE_SIZE 138
+
+#define SPRITE_FILE_SIZE 88365
 
 GError    *error        = NULL;
 GtkWidget *window       = NULL;
@@ -27,6 +30,9 @@ SurfaceTest* surface         = nullptr;
 
 char         my_font[FONT_FILE_SIZE];
 Font*        my_font_ptr = nullptr;
+
+char         test_sprite[SPRITE_FILE_SIZE];
+Sprite*      test_sprite_ptr = nullptr;
 
 gint draw_frame (gpointer data)
 {
@@ -111,6 +117,15 @@ int main (int argc, char **argv)
 
 	Font font( (uint8_t*)my_font );
 	my_font_ptr = &font;
+
+	nSize = SPRITE_FILE_SIZE;
+	std::ifstream spriteFile;
+	spriteFile.open( "./TestImage.sif" );
+	spriteFile.read( test_sprite, nSize );
+	spriteFile.close();
+
+	Sprite sprite( (uint8_t*)test_sprite );
+	test_sprite_ptr = &sprite;
 
 	GtkApplication *app;
 	int status;

@@ -4,9 +4,12 @@
 
 #include "Graphics.hpp"
 
+
 class Font;
+class Sprite;
 
 extern Font* my_font_ptr;
+extern Sprite* test_sprite_ptr;
 
 typedef struct square
 {
@@ -35,8 +38,7 @@ Triangle my_triangle = { 0.5f, 0.3f, 0.2f, 0.6f, 0.8f, 0.6f };
 float incr = 0.01f;
 
 SurfaceTest::SurfaceTest (unsigned int width, unsigned int height, const CP_FORMAT& format) :
-	Surface (width, height, format),
-	m_TestSprite( 50, 50, CP_FORMAT::MONOCHROME_1BIT )
+	Surface (width, height, format)
 {
 	m_Graphics->setColor( 1.0f, 1.0f, 1.0f );
 	m_Graphics->setFont( my_font_ptr );
@@ -233,12 +235,15 @@ void SurfaceTest::draw()
 	static float textXMov = -0.01f;
 	static float textYMov = 0.005f;
 	m_Graphics->setColor( 0.5f, 1.0f, 1.0f );
-	m_Graphics->drawText( textX, textY, "mikey", 5.0f );
+	m_Graphics->drawText( textX, textY, "siike", 5.0f );
 	textX += textXMov;
 	textY += textYMov;
 	if ( textX > 1.2f || textX < -0.5f) textXMov = textXMov * -1.0f;
 	if ( textY < -0.2f || textY > 1.0f ) textYMov = textYMov * -1.0f;
 
+	m_Graphics->drawSprite( 0.5f, 0.5f, *test_sprite_ptr );
+
+	/* old test code to draw to a sprite
 	m_Graphics->setFrameBuffer( &m_TestSprite );
 	m_Graphics->setColor( 1.0f, 1.0f, 1.0f );
 	m_Graphics->fill();
@@ -247,4 +252,5 @@ void SurfaceTest::draw()
 
 	m_Graphics->setFrameBuffer( m_FrameBuffer );
 	m_Graphics->drawSprite( 0.5f, 0.5f, m_TestSprite );
+	*/
 }

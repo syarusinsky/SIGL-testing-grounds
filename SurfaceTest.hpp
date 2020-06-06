@@ -2,7 +2,8 @@
 #define SURFACETEST_HPP
 
 #include "Surface.hpp"
-#include "Sprite.hpp"
+
+class Sprite;
 
 class SurfaceTest : public Surface
 {
@@ -13,7 +14,6 @@ class SurfaceTest : public Surface
 		void draw() override;
 
 	private:
-		Sprite m_TestSprite;
 };
 
 #endif // SURFACETEST_HPP
