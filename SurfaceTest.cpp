@@ -3,6 +3,7 @@
 #include <math.h>
 
 #include "Graphics.hpp"
+#include "Sprite.hpp"
 
 
 class Font;
@@ -230,18 +231,35 @@ void SurfaceTest::draw()
 		originYIncr = -0.02f;
 	}
 
+	static float textScale = 10.0f;
+	static float textScaleIncr = -0.1f;
 	static float textX = 0.5f;
 	static float textY = 0.5f;
 	static float textXMov = -0.01f;
 	static float textYMov = 0.005f;
 	m_Graphics->setColor( 0.5f, 1.0f, 1.0f );
-	m_Graphics->drawText( textX, textY, "siike", 5.0f );
+	m_Graphics->drawText( textX, textY, "siike", textScale );
+	textScale += textScaleIncr;
 	textX += textXMov;
 	textY += textYMov;
+	if ( textScale > 10.0f || textScale < 0.5f ) textScaleIncr = textScaleIncr * -1.0f;
 	if ( textX > 1.2f || textX < -0.5f) textXMov = textXMov * -1.0f;
 	if ( textY < -0.2f || textY > 1.0f ) textYMov = textYMov * -1.0f;
 
-	m_Graphics->drawSprite( 0.5f, 0.5f, *test_sprite_ptr );
+	static float spriteScale = 1.5f;
+	static float spriteScaleIncr = -0.01f;
+	static float spriteX = 0.2f;
+	static float spriteY = 0.2f;
+	static float spriteXMov = 0.005f;
+	static float spriteYMov = -0.01f;
+	test_sprite_ptr->setScaleFactor( spriteScale );
+	m_Graphics->drawSprite( spriteX, spriteY, *test_sprite_ptr );
+	spriteScale += spriteScaleIncr;
+	spriteX += spriteXMov;
+	spriteY += spriteYMov;
+	if ( spriteScale > 1.5f || spriteScale < 0.2f ) spriteScaleIncr = spriteScaleIncr * -1.0f;
+	if ( spriteX > 1.2f || spriteX < -0.2f ) spriteXMov = spriteXMov * -1.0f;
+	if ( spriteY > 1.2f || spriteY < -0.9f ) spriteYMov = spriteYMov * -1.0f;
 
 	/* old test code to draw to a sprite
 	m_Graphics->setFrameBuffer( &m_TestSprite );
