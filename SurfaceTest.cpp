@@ -252,14 +252,19 @@ void SurfaceTest::draw()
 	static float spriteY = 0.2f;
 	static float spriteXMov = 0.005f;
 	static float spriteYMov = -0.01f;
+	static int   spriteRotDegrees = 0;
+	static int   spriteRotIncr = 1;
+	test_sprite_ptr->setRotationAngle( spriteRotDegrees );
 	test_sprite_ptr->setScaleFactor( spriteScale );
 	m_Graphics->drawSprite( spriteX, spriteY, *test_sprite_ptr );
 	spriteScale += spriteScaleIncr;
 	spriteX += spriteXMov;
 	spriteY += spriteYMov;
+	spriteRotDegrees += spriteRotIncr;
 	if ( spriteScale > 1.5f || spriteScale < 0.2f ) spriteScaleIncr = spriteScaleIncr * -1.0f;
-	if ( spriteX > 1.2f || spriteX < -0.2f ) spriteXMov = spriteXMov * -1.0f;
-	if ( spriteY > 1.2f || spriteY < -0.9f ) spriteYMov = spriteYMov * -1.0f;
+	if ( spriteX > 0.9f || spriteX < -0.1f ) spriteXMov = spriteXMov * -1.0f;
+	if ( spriteY > 0.7f || spriteY < -0.2f ) spriteYMov = spriteYMov * -1.0f;
+	if ( spriteRotDegrees > 1023 || spriteRotDegrees < -2000 ) spriteRotIncr * -1;
 
 	/* old test code to draw to a sprite
 	m_Graphics->setFrameBuffer( &m_TestSprite );
