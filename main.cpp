@@ -44,7 +44,7 @@ gint draw_frame (gpointer data)
 		for ( unsigned int pixel = 0; pixel < (SCREEN_WIDTH * SCREEN_HEIGHT); pixel++ )
 		{
 			unsigned int byte = std::floor( pixel / 8 );
-			unsigned int realPixel = pixel % 8;
+			unsigned int realPixel = 7 - (pixel % 8);
 			uint8_t realPixelMask = ( 1 << realPixel );
 			if ( my_pixels[byte] & realPixelMask )
 			{
