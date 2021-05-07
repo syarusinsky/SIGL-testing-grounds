@@ -59,11 +59,11 @@ static float trianglePixelY = 0.0f;
 static float trianglePixelXIncr = 0.005f;
 static float trianglePixelYIncr = 0.002f;
 
-// m_Graphics->drawTriangleGradient( trianglePixelX, trianglePixelY, 0.7f, 0.7f, 0.3f, 0.3f ); 		// this produces black spots currently
+// m_Graphics->drawTriangleGradient( trianglePixelX, trianglePixelY, 0.7f, 0.7f, 0.3f, 0.3f );
 // m_Graphics->drawTriangleGradient( 0.25f, 0.75f, 0.2f, 0.8f, 0.8f, 0.8f );
 // m_Graphics->drawTriangleGradient( 0.8f, 0.8f, 0.2f, 0.8f, 0.5f, 0.2f );
 // m_Graphics->drawTriangleGradient( 0.2f, 0.5f, 0.8f, 0.2f, 0.8f, 0.8f );
-m_Graphics->drawTriangleGradient( trianglePixelX, trianglePixelY, 0.2f, 1.0f, 0.0f, 0.0f ); 		// yet this is mostly fine???
+m_Graphics->drawTriangleGradient( trianglePixelX, trianglePixelY, 0.4f, 1.0f, 0.6f, 1.0f );
 
 trianglePixelX += trianglePixelXIncr;
 if (trianglePixelX >= 1.0f)
