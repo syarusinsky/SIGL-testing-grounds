@@ -60,10 +60,10 @@ static float trianglePixelXIncr = 0.005f;
 static float trianglePixelYIncr = 0.002f;
 
 // m_Graphics->drawTriangleGradient( trianglePixelX, trianglePixelY, 0.7f, 0.7f, 0.3f, 0.3f );
-// m_Graphics->drawTriangleGradient( 0.25f, 0.75f, 0.2f, 0.8f, 0.8f, 0.8f );
-// m_Graphics->drawTriangleGradient( 0.8f, 0.8f, 0.2f, 0.8f, 0.5f, 0.2f );
-// m_Graphics->drawTriangleGradient( 0.2f, 0.5f, 0.8f, 0.2f, 0.8f, 0.8f );
-m_Graphics->drawTriangleGradient( trianglePixelX, trianglePixelY, 0.4f, 1.0f, 0.6f, 1.0f );
+
+// just finished testing when xy1 is on the top, and it works great
+// now need to implement when xy1 is in the middle and when xy1 is on the bottom
+m_Graphics->drawTriangleGradient( 0.0f, 0.78f, trianglePixelX, 0.8f, 1.0f - trianglePixelX, 0.9f );
 
 trianglePixelX += trianglePixelXIncr;
 if (trianglePixelX >= 1.0f)
