@@ -4,7 +4,7 @@
 
 #include "Graphics.hpp"
 #include "Sprite.hpp"
-
+#include "Engine3D.hpp"
 
 class Font;
 class Sprite;
@@ -258,6 +258,42 @@ void SurfaceTest::draw()
 	if ( spriteX > 0.9f || spriteX < -0.1f ) spriteXMov = spriteXMov * -1.0f;
 	if ( spriteY > 0.7f || spriteY < -0.2f ) spriteYMov = spriteYMov * -1.0f;
 	if ( spriteRotDegrees > 1023 || spriteRotDegrees < -2000 ) spriteRotIncr * -1;
+
+	// TODO remove this once the 3D engine has a proper mesh rendering algorithm
+	// draw cube
+	float aspectRatio = static_cast<float>(m_FrameBuffer->getHeight()) / static_cast<float>(m_FrameBuffer->getWidth());
+	Camera3D camera( 0.001f, 1000.0f, 90.0f, aspectRatio );
+	Mesh cube = createCubeMesh();
+	cube.scale( 0.5f );
+	static float xTranslate = 0.0f;
+	static float xTranslateIncr = 0.01f;
+	for ( Face& face : cube.faces )
+	{
+		// translate away from camera
+		face.vertices[0].vec.z += 3.0;
+		face.vertices[1].vec.z += 3.0;
+		face.vertices[2].vec.z += 3.0;
+		// translate sideways
+		face.vertices[0].vec.x += xTranslate;
+		face.vertices[1].vec.x += xTranslate;
+		face.vertices[2].vec.x += xTranslate;
+
+		Face projectedFace = camera.projectFace( face );
+		camera.scaleXYToZeroToOne( projectedFace );
+		m_Graphics->setColor( 1.0f, 1.0f, 1.0f );
+		m_Graphics->drawTriangle( projectedFace.vertices[0].vec.x, projectedFace.vertices[0].vec.y,
+									projectedFace.vertices[1].vec.x, projectedFace.vertices[1].vec.y,
+									projectedFace.vertices[2].vec.x, projectedFace.vertices[2].vec.y );
+	}
+	xTranslate += xTranslateIncr;
+	if ( xTranslate >= 3.0f )
+	{
+		xTranslateIncr *= -1.0f;
+	}
+	else if ( xTranslate <= -3.0f )
+	{
+		xTranslateIncr *= -1.0f;
+	}
 
 	/* old test code to draw to a sprite
 	m_Graphics->setFrameBuffer( &m_TestSprite );
