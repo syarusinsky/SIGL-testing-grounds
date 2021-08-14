@@ -6,6 +6,8 @@
 #include "Sprite.hpp"
 #include "Engine3D.hpp"
 
+#include <iostream>
+
 class Font;
 class Sprite;
 
@@ -267,23 +269,36 @@ void SurfaceTest::draw()
 	cube.scale( 0.5f );
 	static float xTranslate = 0.0f;
 	static float xTranslateIncr = 0.01f;
+	static float xRotation = 0.0f;
+	static float xRotationIncr = 1.0f;
+	Matrix<4, 4> rotationMatrix = generateRotationMatrix( xRotation, xRotation * 0.5f, 0.0f );
 	for ( Face& face : cube.faces )
 	{
+		// translate to origin for rotation
+		face.vertices[0].vec -= 0.25f;
+		face.vertices[1].vec -= 0.25f;
+		face.vertices[2].vec -= 0.25f;
+
+		// rotate
+		face.vertices[0].vec = mulVector3DByMatrix4D( face.vertices[0].vec, rotationMatrix );
+		face.vertices[1].vec = mulVector3DByMatrix4D( face.vertices[1].vec, rotationMatrix );
+		face.vertices[2].vec = mulVector3DByMatrix4D( face.vertices[2].vec, rotationMatrix );
+
 		// translate away from camera
-		face.vertices[0].vec.z += 3.0;
-		face.vertices[1].vec.z += 3.0;
-		face.vertices[2].vec.z += 3.0;
+		face.vertices[0].vec.z() += 3.0;
+		face.vertices[1].vec.z() += 3.0;
+		face.vertices[2].vec.z() += 3.0;
 		// translate sideways
-		face.vertices[0].vec.x += xTranslate;
-		face.vertices[1].vec.x += xTranslate;
-		face.vertices[2].vec.x += xTranslate;
+		face.vertices[0].vec.x() += xTranslate;
+		face.vertices[1].vec.x() += xTranslate;
+		face.vertices[2].vec.x() += xTranslate;
 
 		Face projectedFace = camera.projectFace( face );
 		camera.scaleXYToZeroToOne( projectedFace );
 		m_Graphics->setColor( 1.0f, 1.0f, 1.0f );
-		m_Graphics->drawTriangle( projectedFace.vertices[0].vec.x, projectedFace.vertices[0].vec.y,
-									projectedFace.vertices[1].vec.x, projectedFace.vertices[1].vec.y,
-									projectedFace.vertices[2].vec.x, projectedFace.vertices[2].vec.y );
+		m_Graphics->drawTriangleGradient( projectedFace.vertices[0].vec.x(), projectedFace.vertices[0].vec.y(),
+									projectedFace.vertices[1].vec.x(), projectedFace.vertices[1].vec.y(),
+									projectedFace.vertices[2].vec.x(), projectedFace.vertices[2].vec.y() );
 	}
 	xTranslate += xTranslateIncr;
 	if ( xTranslate >= 3.0f )
@@ -293,6 +308,11 @@ void SurfaceTest::draw()
 	else if ( xTranslate <= -3.0f )
 	{
 		xTranslateIncr *= -1.0f;
+	}
+	xRotation += xRotationIncr;
+	if ( xRotation >= 360.0f )
+	{
+		xRotation = 0.0f;
 	}
 
 	/* old test code to draw to a sprite
