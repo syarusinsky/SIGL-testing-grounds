@@ -285,21 +285,33 @@ void SurfaceTest::draw()
 		face.vertices[2].vec = mulVector3DByMatrix4D( face.vertices[2].vec, rotationMatrix );
 
 		// translate away from camera
-		face.vertices[0].vec.z() += 3.0;
-		face.vertices[1].vec.z() += 3.0;
-		face.vertices[2].vec.z() += 3.0;
+		face.vertices[0].vec.z() += 3.0f;
+		face.vertices[1].vec.z() += 3.0f;
+		face.vertices[2].vec.z() += 3.0f;
 		// translate sideways
 		face.vertices[0].vec.x() += xTranslate;
 		face.vertices[1].vec.x() += xTranslate;
 		face.vertices[2].vec.x() += xTranslate;
 
-		Face projectedFace = camera.projectFace( face );
-		camera.scaleXYToZeroToOne( projectedFace );
-		m_Graphics->setColor( 1.0f, 1.0f, 1.0f );
-		m_Graphics->drawTriangleGradient( projectedFace.vertices[0].vec.x(), projectedFace.vertices[0].vec.y(),
-									projectedFace.vertices[1].vec.x(), projectedFace.vertices[1].vec.y(),
-									projectedFace.vertices[2].vec.x(), projectedFace.vertices[2].vec.y() );
+		// calculate normals
+		face.calcNormals();
+
+		// render depending on dot product with normal
+		Vector<3>& vertexVec = face.vertices[0].vec;
+		Vector<3>& normal = face.normal;
+		if ( normal.x() * (vertexVec.x() - camera.x())
+				+ normal.y() * (vertexVec.y() - camera.y())
+				+ normal.z() * (vertexVec.z() - camera.z()) < 0.0f )
+		{
+			Face projectedFace = camera.projectFace( face );
+			camera.scaleXYToZeroToOne( projectedFace );
+			m_Graphics->setColor( 1.0f, 1.0f, 1.0f );
+			m_Graphics->drawTriangleGradient( projectedFace.vertices[0].vec.x(), projectedFace.vertices[0].vec.y(),
+										projectedFace.vertices[1].vec.x(), projectedFace.vertices[1].vec.y(),
+										projectedFace.vertices[2].vec.x(), projectedFace.vertices[2].vec.y() );
+		}
 	}
+
 	xTranslate += xTranslateIncr;
 	if ( xTranslate >= 3.0f )
 	{
