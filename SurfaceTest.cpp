@@ -307,8 +307,8 @@ void SurfaceTest::draw()
 			camera.scaleXYToZeroToOne( projectedFace );
 			m_Graphics->setColor( 1.0f, 1.0f, 1.0f );
 			m_Graphics->drawTriangleGradient( projectedFace.vertices[0].vec.x(), projectedFace.vertices[0].vec.y(),
-										projectedFace.vertices[1].vec.x(), projectedFace.vertices[1].vec.y(),
-										projectedFace.vertices[2].vec.x(), projectedFace.vertices[2].vec.y() );
+									projectedFace.vertices[1].vec.x(), projectedFace.vertices[1].vec.y(),
+									projectedFace.vertices[2].vec.x(), projectedFace.vertices[2].vec.y() );
 		}
 	}
 
