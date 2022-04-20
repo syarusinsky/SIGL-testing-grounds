@@ -2,7 +2,11 @@
 
 #include <math.h>
 
-#include "Graphics.hpp"
+#ifdef SOFTWARE_GRAPHICS
+#include "SoftwareGraphics.hpp"
+#else
+#include "SoftwareGraphics.hpp" // TODO if I ever implement hardware acceleration, this needs to change
+#endif
 #include "Sprite.hpp"
 #include "Engine3D.hpp"
 
