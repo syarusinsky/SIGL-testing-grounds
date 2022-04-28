@@ -282,9 +282,9 @@ void SurfaceTest::draw()
 		face.vertices[2].vec -= 0.25f;
 
 		// rotate
-		face.vertices[0].vec = mulVector3DByMatrix4D( face.vertices[0].vec, rotationMatrix );
-		face.vertices[1].vec = mulVector3DByMatrix4D( face.vertices[1].vec, rotationMatrix );
-		face.vertices[2].vec = mulVector3DByMatrix4D( face.vertices[2].vec, rotationMatrix );
+		face.vertices[0].vec = mulVector4DByMatrix4D( face.vertices[0].vec, rotationMatrix );
+		face.vertices[1].vec = mulVector4DByMatrix4D( face.vertices[1].vec, rotationMatrix );
+		face.vertices[2].vec = mulVector4DByMatrix4D( face.vertices[2].vec, rotationMatrix );
 
 		// translate away from camera
 		face.vertices[0].vec.z() += 1.5f;
