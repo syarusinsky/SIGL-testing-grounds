@@ -167,8 +167,6 @@ void SurfaceTest::draw()
 
 	m_Graphics->drawQuadFilled( trianglePixelX, trianglePixelY, 0.6f, 0.4f, 0.6f, 0.6f, 0.5f, 0.6f );
 
-	m_Graphics->drawQuadGradient( trianglePixelX + 0.2f, trianglePixelY + 0.3f, 0.1f, 0.7f, 0.4f, 0.6f, 0.15f, 0.55f );
-
 	m_Graphics->setColor( 0.3f, 1.0f, 0.3f );
 
 	static float boxPixelXStart = -0.05f;
@@ -297,23 +295,7 @@ void SurfaceTest::draw()
 		face.vertices[1].vec.x() += xTranslate;
 		face.vertices[2].vec.x() += xTranslate;
 
-		// calculate normals
-		face.calcNormals();
-
-		// render depending on dot product with normal
-		Vector<3>& vertexVec = face.vertices[0].vec;
-		Vector<3>& normal = face.normal;
-		if ( normal.x() * (vertexVec.x() - camera.x())
-				+ normal.y() * (vertexVec.y() - camera.y())
-				+ normal.z() * (vertexVec.z() - camera.z()) < 0.0f )
-		{
-			Face projectedFace = camera.projectFace( face );
-			camera.scaleXYToZeroToOne( projectedFace );
-			m_Graphics->setColor( 1.0f, 1.0f, 1.0f );
-			m_Graphics->drawTriangleGradient( projectedFace.vertices[0].vec.x(), projectedFace.vertices[0].vec.y(),
-									projectedFace.vertices[1].vec.x(), projectedFace.vertices[1].vec.y(),
-									projectedFace.vertices[2].vec.x(), projectedFace.vertices[2].vec.y() );
-		}
+		m_Graphics->drawTriangleShaded( face, camera );
 	}
 
 	xTranslate += xTranslateIncr;
