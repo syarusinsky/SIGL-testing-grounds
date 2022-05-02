@@ -10,6 +10,8 @@
 #include "Sprite.hpp"
 #include "Engine3D.hpp"
 
+#include "Texture.hpp"
+
 #include <iostream>
 
 class Font;
@@ -17,6 +19,7 @@ class Sprite;
 
 extern Font* my_font_ptr;
 extern Sprite* test_sprite_ptr;
+extern Texture* test_texture_ptr;
 
 typedef struct square
 {
@@ -265,6 +268,12 @@ void SurfaceTest::draw()
 
 	// TODO remove this once the 3D engine has a proper mesh rendering algorithm
 	// draw cube
+	m_Graphics->setTexture( test_texture_ptr );
+	m_Graphics->setFragmentShader( [](Color& color, Face& face, Texture* texture, float v1Cur, float v2Cur, float v3Cur, float texCoordX,
+						float texCoordY)
+			{
+				color = texture->getColor( texCoordX, texCoordY );
+			} );
 	float aspectRatio = static_cast<float>(m_FrameBuffer->getHeight()) / static_cast<float>(m_FrameBuffer->getWidth());
 	Camera3D camera( 0.001f, 1000.0f, 90.0f, aspectRatio );
 	Mesh cube = createCubeMesh();
@@ -274,7 +283,7 @@ void SurfaceTest::draw()
 	static float xRotation = 0.0f;
 	static float xRotationIncr = 1.0f;
 	Matrix<4, 4> rotationMatrix = generateRotationMatrix( xRotation, xRotation * 0.5f, 0.0f );
-	for ( Face& face : cube.faces )
+	for ( Face face : cube.faces )
 	{
 		// translate to origin for rotation
 		face.vertices[0].vec -= 0.25f;

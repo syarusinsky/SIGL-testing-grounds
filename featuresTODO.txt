@@ -1,0 +1,9 @@
+RENDERER:
+- Texture filtering/mip mapping?
+- Point lighting/specular highlighting
+- Directional lighting (shadow mapping)
+- Z-buffering
+- Better clipping?
+- Transparency
+- Vectorize (create a vector library and vectorize the drawTriangleShaded, fill, and other functions)
+- Multiple frame buffering (threads rendering frames in a circular buffer)threads rendering frames in a circular buffer)

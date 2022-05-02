@@ -3,6 +3,7 @@
 #include "SurfaceTest.hpp"
 #include "Font.hpp"
 #include "Sprite.hpp"
+#include "Texture.hpp"
 #include "FrameBuffer.hpp"
 
 #include <iostream>
@@ -17,6 +18,8 @@
 #define FONT_FILE_SIZE 779
 
 #define SPRITE_FILE_SIZE 88365
+
+#define TEXTURE_FILE_SIZE 262153
 
 GError    *error        = NULL;
 GtkWidget *window       = NULL;
@@ -33,6 +36,9 @@ Font*        my_font_ptr = nullptr;
 
 char         test_sprite[SPRITE_FILE_SIZE];
 Sprite*      test_sprite_ptr = nullptr;
+
+char         test_texture[TEXTURE_FILE_SIZE];
+Texture*     test_texture_ptr = nullptr;
 
 gint draw_frame (gpointer data)
 {
@@ -62,7 +68,28 @@ gint draw_frame (gpointer data)
 	}
 	else
 	{
-		memcpy( fb_pixels, my_pixels, (SCREEN_WIDTH * SCREEN_HEIGHT * 3) );
+		for ( unsigned int row = 0; row < SCREEN_HEIGHT; row++ )
+		{
+			for ( unsigned int column = 0; column < SCREEN_WIDTH; column++ )
+			{
+				unsigned int r = my_pixels[(((row * SCREEN_WIDTH) + column) * 3) + 0];
+				unsigned int g = my_pixels[(((row * SCREEN_WIDTH) + column) * 3) + 1];
+				unsigned int b = my_pixels[(((row * SCREEN_WIDTH) + column) * 3) + 2];
+				const unsigned int fbWidth = SCREEN_WIDTH * 2;
+				fb_pixels[((row * 2 * fbWidth) + (column * 2)) * 3 + 0] = r;
+				fb_pixels[((row * 2 * fbWidth) + (column * 2)) * 3 + 1] = g;
+				fb_pixels[((row * 2 * fbWidth) + (column * 2)) * 3 + 2] = b;
+				fb_pixels[((row * 2 * fbWidth) + (column * 2 + 1)) * 3 + 0] = r;
+				fb_pixels[((row * 2 * fbWidth) + (column * 2 + 1)) * 3 + 1] = g;
+				fb_pixels[((row * 2 * fbWidth) + (column * 2 + 1)) * 3 + 2] = b;
+				fb_pixels[(((row * 2 + 1) * fbWidth) + (column * 2)) * 3 + 0] = r;
+				fb_pixels[(((row * 2 + 1) * fbWidth) + (column * 2)) * 3 + 1] = g;
+				fb_pixels[(((row * 2 + 1) * fbWidth) + (column * 2)) * 3 + 2] = b;
+				fb_pixels[(((row * 2 + 1) * fbWidth) + (column * 2 + 1)) * 3 + 0] = r;
+				fb_pixels[(((row * 2 + 1) * fbWidth) + (column * 2 + 1)) * 3 + 1] = g;
+				fb_pixels[(((row * 2 + 1) * fbWidth) + (column * 2 + 1)) * 3 + 2] = b;
+			}
+		}
 	}
 
 	// reset image widget
@@ -81,7 +108,7 @@ static void activate (GtkApplication* app, gpointer user_data)
 	my_pixels = surface->getFrameBuffer()->getPixels();
 
 	// load image into pixbuf and error check
-	frame_buffer = gdk_pixbuf_new( GdkColorspace::GDK_COLORSPACE_RGB, false, 8, SCREEN_WIDTH, SCREEN_HEIGHT );
+	frame_buffer = gdk_pixbuf_new( GdkColorspace::GDK_COLORSPACE_RGB, false, 8, SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2 );
 	if (error != NULL)
 	{
 		fprintf (stderr, "Unable to read file: %s\n", error->message);
@@ -126,6 +153,15 @@ int main (int argc, char **argv)
 
 	Sprite sprite( (uint8_t*)test_sprite );
 	test_sprite_ptr = &sprite;
+
+	nSize = TEXTURE_FILE_SIZE;
+	std::ifstream textureFile;
+	textureFile.open( "./box-texture.sif" );
+	textureFile.read( test_texture, nSize );
+	textureFile.close();
+
+	Texture texture( (uint8_t*)test_texture );
+	test_texture_ptr = &texture;
 
 	GtkApplication *app;
 	int status;
