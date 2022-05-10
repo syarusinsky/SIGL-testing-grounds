@@ -34,11 +34,11 @@ SurfaceTest* surface         = nullptr;
 char         my_font[FONT_FILE_SIZE];
 Font*        my_font_ptr = nullptr;
 
-char         test_sprite[SPRITE_FILE_SIZE];
-Sprite*      test_sprite_ptr = nullptr;
+// char         test_sprite[SPRITE_FILE_SIZE];
+// Sprite*      test_sprite_ptr = nullptr;
 
-char         test_texture[TEXTURE_FILE_SIZE];
-Texture*     test_texture_ptr = nullptr;
+// char         test_texture[TEXTURE_FILE_SIZE];
+// Texture*     test_texture_ptr = nullptr;
 
 gint draw_frame (gpointer data)
 {
@@ -101,11 +101,11 @@ gint draw_frame (gpointer data)
 static void activate (GtkApplication* app, gpointer user_data)
 {
 	// create context
-	surface = new SurfaceTest( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_COLOR_FORMAT );
+	surface = new SurfaceTest();
 
 	// get access to pixels in framebuffer
-	const FrameBuffer* fb = surface->getFrameBuffer();
-	my_pixels = surface->getFrameBuffer()->getPixels();
+	const FrameBuffer<SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_COLOR_FORMAT>* fb = &surface->getFrameBuffer();
+	my_pixels = &surface->getFrameBuffer().getPixels()[0];
 
 	// load image into pixbuf and error check
 	frame_buffer = gdk_pixbuf_new( GdkColorspace::GDK_COLORSPACE_RGB, false, 8, SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2 );
@@ -145,23 +145,23 @@ int main (int argc, char **argv)
 	Font font( (uint8_t*)my_font );
 	my_font_ptr = &font;
 
-	nSize = SPRITE_FILE_SIZE;
-	std::ifstream spriteFile;
-	spriteFile.open( "./TestImage.sif" );
-	spriteFile.read( test_sprite, nSize );
-	spriteFile.close();
+	// nSize = SPRITE_FILE_SIZE;
+	// std::ifstream spriteFile;
+	// spriteFile.open( "./TestImage.sif" );
+	// spriteFile.read( test_sprite, nSize );
+	// spriteFile.close();
 
-	Sprite sprite( (uint8_t*)test_sprite );
-	test_sprite_ptr = &sprite;
+	// Sprite sprite( (uint8_t*)test_sprite );
+	// test_sprite_ptr = &sprite;
 
-	nSize = TEXTURE_FILE_SIZE;
-	std::ifstream textureFile;
-	textureFile.open( "./box-texture.sif" );
-	textureFile.read( test_texture, nSize );
-	textureFile.close();
+	// nSize = TEXTURE_FILE_SIZE;
+	// std::ifstream textureFile;
+	// textureFile.open( "./box-texture.sif" );
+	// textureFile.read( test_texture, nSize );
+	// textureFile.close();
 
-	Texture texture( (uint8_t*)test_texture );
-	test_texture_ptr = &texture;
+	// Texture texture( (uint8_t*)test_texture );
+	// test_texture_ptr = &texture;
 
 	GtkApplication *app;
 	int status;

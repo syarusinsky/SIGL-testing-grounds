@@ -3,12 +3,10 @@
 
 #include "Surface.hpp"
 
-class Sprite;
-
-class SurfaceTest : public Surface
+class SurfaceTest : public Surface<640, 480, CP_FORMAT::RGB_24BIT>
 {
 	public:
-		SurfaceTest (unsigned int width, unsigned int height, const CP_FORMAT& format);
+		SurfaceTest();
 		~SurfaceTest();
 
 		void draw() override;

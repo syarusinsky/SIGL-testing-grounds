@@ -14,12 +14,12 @@
 
 #include <iostream>
 
-class Font;
-class Sprite;
+// class Font;
+// class Sprite;
 
-extern Font* my_font_ptr;
-extern Sprite* test_sprite_ptr;
-extern Texture* test_texture_ptr;
+// extern Font* my_font_ptr;
+// extern Sprite* test_sprite_ptr;
+// extern Texture* test_texture_ptr;
 
 typedef struct square
 {
@@ -47,11 +47,11 @@ Square my_square = { 0.2f, 0.2f, 0.8f, 0.1f, 0.8f, 0.7f, 0.2f, 0.8f };
 Triangle my_triangle = { 0.5f, 0.3f, 0.2f, 0.6f, 0.8f, 0.6f };
 float incr = 0.01f;
 
-SurfaceTest::SurfaceTest (unsigned int width, unsigned int height, const CP_FORMAT& format) :
-	Surface (width, height, format)
+SurfaceTest::SurfaceTest() :
+	Surface()
 {
 	m_Graphics->setColor( 1.0f, 1.0f, 1.0f );
-	m_Graphics->setFont( my_font_ptr );
+	// m_Graphics->setFont( my_font_ptr );
 }
 
 SurfaceTest::~SurfaceTest()
@@ -222,6 +222,7 @@ void SurfaceTest::draw()
 		originYIncr = -0.02f;
 	}
 
+	/*
 	static float textScale = 10.0f;
 	static float textScaleIncr = -0.1f;
 	static float textX = 0.5f;
@@ -236,6 +237,7 @@ void SurfaceTest::draw()
 	if ( textScale > 10.0f || textScale < 0.5f ) textScaleIncr = textScaleIncr * -1.0f;
 	if ( textX > 1.2f || textX < -0.5f) textXMov = textXMov * -1.0f;
 	if ( textY < -0.2f || textY > 1.0f ) textYMov = textYMov * -1.0f;
+	*/
 
 	/*
 	// tests all characters
@@ -246,6 +248,7 @@ void SurfaceTest::draw()
 	m_Graphics->drawText( 0.0f, 0.3f, "[{]}\\|;:'\",<.>/?", 3.0f );
 	*/
 
+	/*
 	static float spriteScale = 1.5f;
 	static float spriteScaleIncr = -0.01f;
 	static float spriteX = 0.2f;
@@ -265,9 +268,11 @@ void SurfaceTest::draw()
 	if ( spriteX > 0.9f || spriteX < -0.1f ) spriteXMov = spriteXMov * -1.0f;
 	if ( spriteY > 0.7f || spriteY < -0.2f ) spriteYMov = spriteYMov * -1.0f;
 	if ( spriteRotDegrees > 1023 || spriteRotDegrees < -2000 ) spriteRotIncr * -1;
+	*/
 
 	// TODO remove this once the 3D engine has a proper mesh rendering algorithm
 	// draw cube
+	/*
 	m_Graphics->setTexture( test_texture_ptr );
 	m_Graphics->setFragmentShader( [](Color& color, Face& face, Texture* texture, float v1Cur, float v2Cur, float v3Cur, float texCoordX,
 						float texCoordY)
@@ -283,28 +288,31 @@ void SurfaceTest::draw()
 	static float xRotation = 0.0f;
 	static float xRotationIncr = 1.0f;
 	Matrix<4, 4> rotationMatrix = generateRotationMatrix( xRotation, xRotation * 0.5f, 0.0f );
-	for ( Face face : cube.faces )
+	for ( unsigned int cubeNum = 0; cubeNum < 40; cubeNum++ )
 	{
-		// translate to origin for rotation
-		face.vertices[0].vec -= 0.25f;
-		face.vertices[1].vec -= 0.25f;
-		face.vertices[2].vec -= 0.25f;
+		for ( Face face : cube.faces )
+		{
+			// translate to origin for rotation
+			face.vertices[0].vec -= 0.25f;
+			face.vertices[1].vec -= 0.25f;
+			face.vertices[2].vec -= 0.25f;
 
-		// rotate
-		face.vertices[0].vec = mulVector4DByMatrix4D( face.vertices[0].vec, rotationMatrix );
-		face.vertices[1].vec = mulVector4DByMatrix4D( face.vertices[1].vec, rotationMatrix );
-		face.vertices[2].vec = mulVector4DByMatrix4D( face.vertices[2].vec, rotationMatrix );
+			// rotate
+			face.vertices[0].vec = mulVector4DByMatrix4D( face.vertices[0].vec, rotationMatrix );
+			face.vertices[1].vec = mulVector4DByMatrix4D( face.vertices[1].vec, rotationMatrix );
+			face.vertices[2].vec = mulVector4DByMatrix4D( face.vertices[2].vec, rotationMatrix );
 
-		// translate away from camera
-		face.vertices[0].vec.z() += 1.5f;
-		face.vertices[1].vec.z() += 1.5f;
-		face.vertices[2].vec.z() += 1.5f;
-		// translate sideways
-		face.vertices[0].vec.x() += xTranslate;
-		face.vertices[1].vec.x() += xTranslate;
-		face.vertices[2].vec.x() += xTranslate;
+			// translate away from camera
+			face.vertices[0].vec.z() += 1.5f;
+			face.vertices[1].vec.z() += 1.5f;
+			face.vertices[2].vec.z() += 1.5f;
+			// translate sideways
+			face.vertices[0].vec.x() += xTranslate;
+			face.vertices[1].vec.x() += xTranslate;
+			face.vertices[2].vec.x() += xTranslate;
 
-		m_Graphics->drawTriangleShaded( face, camera );
+			m_Graphics->drawTriangleShaded( face, camera );
+		}
 	}
 
 	xTranslate += xTranslateIncr;
@@ -321,6 +329,7 @@ void SurfaceTest::draw()
 	{
 		xRotation = 0.0f;
 	}
+	*/
 
 	/* old test code to draw to a sprite
 	m_Graphics->setFrameBuffer( &m_TestSprite );
