@@ -28,7 +28,7 @@ GdkPixbuf *frame_buffer = NULL;
 guchar    *fb_pixels    = NULL;
 guint     fb_pixel_length;
 
-uint8_t*     my_pixels       = nullptr;
+std::array<uint8_t, SCREEN_WIDTH * SCREEN_HEIGHT * 3>* my_pixels = nullptr;
 SurfaceTest* surface         = nullptr;
 
 char         my_font[FONT_FILE_SIZE];
@@ -52,7 +52,7 @@ gint draw_frame (gpointer data)
 			unsigned int byte = std::floor( pixel / 8 );
 			unsigned int realPixel = 7 - (pixel % 8);
 			uint8_t realPixelMask = ( 1 << realPixel );
-			if ( my_pixels[byte] & realPixelMask )
+			if ( (*my_pixels)[byte] & realPixelMask )
 			{
 				fb_pixels[(pixel * 3) + 0] = 255;
 				fb_pixels[(pixel * 3) + 1] = 255;
@@ -72,9 +72,9 @@ gint draw_frame (gpointer data)
 		{
 			for ( unsigned int column = 0; column < SCREEN_WIDTH; column++ )
 			{
-				unsigned int r = my_pixels[(((row * SCREEN_WIDTH) + column) * 3) + 0];
-				unsigned int g = my_pixels[(((row * SCREEN_WIDTH) + column) * 3) + 1];
-				unsigned int b = my_pixels[(((row * SCREEN_WIDTH) + column) * 3) + 2];
+				uint8_t r = (*my_pixels)[(((row * SCREEN_WIDTH) + column) * 3) + 0];
+				uint8_t g = (*my_pixels)[(((row * SCREEN_WIDTH) + column) * 3) + 1];
+				uint8_t b = (*my_pixels)[(((row * SCREEN_WIDTH) + column) * 3) + 2];
 				const unsigned int fbWidth = SCREEN_WIDTH * 2;
 				fb_pixels[((row * 2 * fbWidth) + (column * 2)) * 3 + 0] = r;
 				fb_pixels[((row * 2 * fbWidth) + (column * 2)) * 3 + 1] = g;
@@ -104,8 +104,8 @@ static void activate (GtkApplication* app, gpointer user_data)
 	surface = new SurfaceTest();
 
 	// get access to pixels in framebuffer
-	const FrameBuffer<SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_COLOR_FORMAT>* fb = &surface->getFrameBuffer();
-	my_pixels = &surface->getFrameBuffer().getPixels()[0];
+	FrameBuffer<SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_COLOR_FORMAT>& fb = surface->getFrameBuffer();
+	my_pixels = &fb.getPixels();
 
 	// load image into pixbuf and error check
 	frame_buffer = gdk_pixbuf_new( GdkColorspace::GDK_COLORSPACE_RGB, false, 8, SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2 );
