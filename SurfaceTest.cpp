@@ -50,21 +50,20 @@ float incr = 0.01f;
 SurfaceTest::SurfaceTest() :
 	Surface()
 {
-	m_Graphics->setColor( 1.0f, 1.0f, 1.0f );
-	// m_Graphics->setFont( my_font_ptr );
+	// graphics->setFont( my_font_ptr );
 }
 
 SurfaceTest::~SurfaceTest()
 {
 }
 
-void SurfaceTest::draw()
+void SurfaceTest::draw (SoftwareGraphics<640, 480, CP_FORMAT::RGB_24BIT, NUM_CORES>* graphics)
 {
-	m_Graphics->setColor( 0.0f, 0.0f, 0.0f );
-	m_Graphics->fill();
+	graphics->setColor( 0.0f, 0.0f, 0.0f );
+	graphics->fill();
 
 	static float blue = 0.1f;
-	m_Graphics->setColor( 0.73f, 0.56f, blue );
+	graphics->setColor( 0.73f, 0.56f, blue );
 
 	static bool flip = false;
 	if (!flip)
@@ -102,27 +101,27 @@ void SurfaceTest::draw()
 		}
 	}
 
-	m_Graphics->drawQuad(
+	graphics->drawQuad(
 			my_square.topLeftX,     my_square.topLeftY,
 			my_square.topRightX,    my_square.topRightY,
 			my_square.bottomRightX, my_square.bottomRightY,
 			my_square.bottomLeftX,  my_square.bottomLeftY   );
 
-	m_Graphics->setColor( 1.0f, 0.1f, blue );
+	graphics->setColor( 1.0f, 0.1f, blue );
 
-	m_Graphics->drawTriangle( my_triangle.x1, my_triangle.y1, my_triangle.x2, my_triangle.y2, my_triangle.x3, my_triangle.y3 );
+	graphics->drawTriangle( my_triangle.x1, my_triangle.y1, my_triangle.x2, my_triangle.y2, my_triangle.x3, my_triangle.y3 );
 
-	m_Graphics->drawTriangle ( 0.1f, 0.4f, 0.0f, 0.2f, 0.0f, 0.6f );
+	graphics->drawTriangle ( 0.1f, 0.4f, 0.0f, 0.2f, 0.0f, 0.6f );
 
-	m_Graphics->setColor( 0.2f, 0.9f, blue );
+	graphics->setColor( 0.2f, 0.9f, blue );
 
-	m_Graphics->drawBoxFilled( 0.7f, 0.2f, 0.9f, 0.5f );
+	graphics->drawBoxFilled( 0.7f, 0.2f, 0.9f, 0.5f );
 
-	m_Graphics->setColor( 0.5f, 0.5f, 0.5f );
+	graphics->setColor( 0.5f, 0.5f, 0.5f );
 
 	static float lineXEnd = -2.0f;
 	static float lineIncr = 0.1f;
-	m_Graphics->drawLine( 0.5f, 1.0f, lineXEnd, -2.0f );
+	graphics->drawLine( 0.5f, 1.0f, lineXEnd, -2.0f );
 	lineXEnd += lineIncr;
 	if (lineXEnd <= -2.0f)
 	{
@@ -133,14 +132,14 @@ void SurfaceTest::draw()
 		lineIncr = -0.1f;
 	}
 
-	m_Graphics->setColor( 0.1f, 0.8f, 0.5f );
+	graphics->setColor( 0.1f, 0.8f, 0.5f );
 
 	static float trianglePixelX = 0.0f;
 	static float trianglePixelY = 0.0f;
 	static float trianglePixelXIncr = 0.005f;
 	static float trianglePixelYIncr = 0.002f;
 
-	m_Graphics->drawTriangleFilled( trianglePixelX, trianglePixelY, 0.7f, 0.7f, 0.3f, 0.3f );
+	graphics->drawTriangleFilled( trianglePixelX, trianglePixelY, 0.7f, 0.7f, 0.3f, 0.3f );
 
 	trianglePixelX += trianglePixelXIncr;
 	if (trianglePixelX >= 1.0f)
@@ -166,17 +165,17 @@ void SurfaceTest::draw()
 		trianglePixelYIncr = 0.002f;
 	}
 
-	m_Graphics->setColor( 1.0f, 0.7f, 0.7f );
+	graphics->setColor( 1.0f, 0.7f, 0.7f );
 
-	m_Graphics->drawQuadFilled( trianglePixelX, trianglePixelY, 0.6f, 0.4f, 0.6f, 0.6f, 0.5f, 0.6f );
+	graphics->drawQuadFilled( trianglePixelX, trianglePixelY, 0.6f, 0.4f, 0.6f, 0.6f, 0.5f, 0.6f );
 
-	m_Graphics->setColor( 0.3f, 1.0f, 0.3f );
+	graphics->setColor( 0.3f, 1.0f, 0.3f );
 
 	static float boxPixelXStart = -0.05f;
 	static float boxPixelYStart = -0.05f;
 	static float boxPixelIncr = 0.01f;
 
-	m_Graphics->drawBoxFilled( boxPixelXStart, boxPixelYStart, boxPixelXStart + 0.1f, boxPixelYStart + 0.1f );
+	graphics->drawBoxFilled( boxPixelXStart, boxPixelYStart, boxPixelXStart + 0.1f, boxPixelYStart + 0.1f );
 
 	boxPixelXStart += boxPixelIncr;
 	boxPixelYStart += boxPixelIncr;
@@ -194,8 +193,8 @@ void SurfaceTest::draw()
 	static float originY = 0.5f;
 	static float originXIncr = -0.05f;
 	static float originYIncr = -0.02f;
-	m_Graphics->setColor( 1.0f, 1.0f, 1.0f );
-	m_Graphics->drawCircleFilled( originX, originY, 0.2f );
+	graphics->setColor( 1.0f, 1.0f, 1.0f );
+	graphics->drawCircleFilled( originX, originY, 0.2f );
 
 	originX += originXIncr;
 	originY += originYIncr;
@@ -229,8 +228,8 @@ void SurfaceTest::draw()
 	static float textY = 0.5f;
 	static float textXMov = -0.01f;
 	static float textYMov = 0.005f;
-	m_Graphics->setColor( 0.5f, 1.0f, 1.0f );
-	m_Graphics->drawText( textX, textY, "siike", textScale );
+	graphics->setColor( 0.5f, 1.0f, 1.0f );
+	graphics->drawText( textX, textY, "siike", textScale );
 	textScale += textScaleIncr;
 	textX += textXMov;
 	textY += textYMov;
@@ -241,11 +240,11 @@ void SurfaceTest::draw()
 
 	/*
 	// tests all characters
-	m_Graphics->setColor( 0.5f, 1.0f, 1.0f );
-	m_Graphics->drawText( 0.0f, 0.0f, "abcdefghijklmnopqrstuvwxyz", 3.0f );
-	m_Graphics->drawText( 0.0f, 0.1f, "ABCDEFGHIJKLMNOPQRSTUVWXYZ", 3.0f );
-	m_Graphics->drawText( 0.0f, 0.2f, "0123456789`~!@#$%^&*()-_=+", 3.0f );
-	m_Graphics->drawText( 0.0f, 0.3f, "[{]}\\|;:'\",<.>/?", 3.0f );
+	graphics->setColor( 0.5f, 1.0f, 1.0f );
+	graphics->drawText( 0.0f, 0.0f, "abcdefghijklmnopqrstuvwxyz", 3.0f );
+	graphics->drawText( 0.0f, 0.1f, "ABCDEFGHIJKLMNOPQRSTUVWXYZ", 3.0f );
+	graphics->drawText( 0.0f, 0.2f, "0123456789`~!@#$%^&*()-_=+", 3.0f );
+	graphics->drawText( 0.0f, 0.3f, "[{]}\\|;:'\",<.>/?", 3.0f );
 	*/
 
 	/*
@@ -259,7 +258,7 @@ void SurfaceTest::draw()
 	static int   spriteRotIncr = 1;
 	test_sprite_ptr->setRotationAngle( spriteRotDegrees );
 	test_sprite_ptr->setScaleFactor( spriteScale );
-	m_Graphics->drawSprite( spriteX, spriteY, *test_sprite_ptr );
+	graphics->drawSprite( spriteX, spriteY, *test_sprite_ptr );
 	spriteScale += spriteScaleIncr;
 	spriteX += spriteXMov;
 	spriteY += spriteYMov;
@@ -273,8 +272,8 @@ void SurfaceTest::draw()
 	// TODO remove this once the 3D engine has a proper mesh rendering algorithm
 	// draw cube
 	/*
-	m_Graphics->setTexture( test_texture_ptr );
-	m_Graphics->setFragmentShader( [](Color& color, Face& face, Texture* texture, float v1Cur, float v2Cur, float v3Cur, float texCoordX,
+	graphics->setTexture( test_texture_ptr );
+	graphics->setFragmentShader( [](Color& color, Face& face, Texture* texture, float v1Cur, float v2Cur, float v3Cur, float texCoordX,
 						float texCoordY)
 			{
 				color = texture->getColor( texCoordX, texCoordY );
@@ -311,7 +310,7 @@ void SurfaceTest::draw()
 			face.vertices[1].vec.x() += xTranslate;
 			face.vertices[2].vec.x() += xTranslate;
 
-			m_Graphics->drawTriangleShaded( face, camera );
+			graphics->drawTriangleShaded( face, camera );
 		}
 	}
 
@@ -332,13 +331,13 @@ void SurfaceTest::draw()
 	*/
 
 	/* old test code to draw to a sprite
-	m_Graphics->setFrameBuffer( &m_TestSprite );
-	m_Graphics->setColor( 1.0f, 1.0f, 1.0f );
-	m_Graphics->fill();
-	m_Graphics->setColor( 0.0f, 0.0f, 0.0f );
-	m_Graphics->drawCircleFilled( 0.5f, 0.5f, 0.2f );
+	graphics->setFrameBuffer( &m_TestSprite );
+	graphics->setColor( 1.0f, 1.0f, 1.0f );
+	graphics->fill();
+	graphics->setColor( 0.0f, 0.0f, 0.0f );
+	graphics->drawCircleFilled( 0.5f, 0.5f, 0.2f );
 
-	m_Graphics->setFrameBuffer( m_FrameBuffer );
-	m_Graphics->drawSprite( 0.5f, 0.5f, m_TestSprite );
+	graphics->setFrameBuffer( m_FrameBuffer );
+	graphics->drawSprite( 0.5f, 0.5f, m_TestSprite );
 	*/
 }

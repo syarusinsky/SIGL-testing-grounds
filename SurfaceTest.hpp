@@ -3,13 +3,15 @@
 
 #include "Surface.hpp"
 
-class SurfaceTest : public Surface<640, 480, CP_FORMAT::RGB_24BIT>
+#define NUM_CORES 32
+
+class SurfaceTest : public Surface<640, 480, CP_FORMAT::RGB_24BIT, NUM_CORES>
 {
 	public:
 		SurfaceTest();
 		~SurfaceTest();
 
-		void draw() override;
+		void draw(SoftwareGraphics<640, 480, CP_FORMAT::RGB_24BIT, NUM_CORES>* graphics) override;
 
 	private:
 };
