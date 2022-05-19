@@ -3,7 +3,7 @@
 
 #include "Surface.hpp"
 
-#define NUM_CORES 32
+#define NUM_CORES 16
 
 class SurfaceTest : public Surface<640, 480, CP_FORMAT::RGB_24BIT, NUM_CORES>
 {

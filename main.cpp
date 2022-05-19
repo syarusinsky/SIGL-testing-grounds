@@ -135,7 +135,7 @@ static void activate (GtkApplication* app, gpointer user_data)
 	fb_pixels = gdk_pixbuf_get_pixels_with_length (frame_buffer, &fb_pixel_length);
 
 	// connect frame draw function to timer (roughly 30 frames per second)
-	g_timeout_add(16, draw_frame, user_data);
+	g_timeout_add(33, draw_frame, user_data);
 }
 
 int main (int argc, char **argv)
