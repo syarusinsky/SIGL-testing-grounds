@@ -15,10 +15,9 @@
 #include <iostream>
 
 class Font;
-// class Sprite;
 
 extern Font* my_font_ptr;
-// extern Sprite* test_sprite_ptr;
+extern Sprite<CP_FORMAT::RGBA_32BIT>* test_sprite_ptr;
 // extern Texture* test_texture_ptr;
 
 typedef struct square
@@ -244,7 +243,6 @@ void SurfaceTest::draw (SoftwareGraphics<640, 480, CP_FORMAT::RGB_24BIT, NUM_COR
 	graphics->drawText( 0.0f, 0.3f, "[{]}\\|;:'\",<.>/?", 3.0f );
 	*/
 
-	/*
 	static float spriteScale = 1.5f;
 	static float spriteScaleIncr = -0.01f;
 	static float spriteX = 0.2f;
@@ -264,7 +262,6 @@ void SurfaceTest::draw (SoftwareGraphics<640, 480, CP_FORMAT::RGB_24BIT, NUM_COR
 	if ( spriteX > 0.9f || spriteX < -0.1f ) spriteXMov = spriteXMov * -1.0f;
 	if ( spriteY > 0.7f || spriteY < -0.2f ) spriteYMov = spriteYMov * -1.0f;
 	if ( spriteRotDegrees > 1023 || spriteRotDegrees < -2000 ) spriteRotIncr * -1;
-	*/
 
 	// TODO remove this once the 3D engine has a proper mesh rendering algorithm
 	// draw cube

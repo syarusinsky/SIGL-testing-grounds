@@ -34,8 +34,8 @@ SurfaceTest* surface         = nullptr;
 char         my_font[FONT_FILE_SIZE];
 Font*        my_font_ptr = nullptr;
 
-// char         test_sprite[SPRITE_FILE_SIZE];
-// Sprite*      test_sprite_ptr = nullptr;
+char         test_sprite[SPRITE_FILE_SIZE];
+Sprite<CP_FORMAT::RGBA_32BIT>*      test_sprite_ptr = nullptr;
 
 // char         test_texture[TEXTURE_FILE_SIZE];
 // Texture*     test_texture_ptr = nullptr;
@@ -150,14 +150,14 @@ int main (int argc, char **argv)
 	Font font( (uint8_t*)my_font );
 	my_font_ptr = &font;
 
-	// nSize = SPRITE_FILE_SIZE;
-	// std::ifstream spriteFile;
-	// spriteFile.open( "./TestImage.sif" );
-	// spriteFile.read( test_sprite, nSize );
-	// spriteFile.close();
+	nSize = SPRITE_FILE_SIZE;
+	std::ifstream spriteFile;
+	spriteFile.open( "./TestImage.sif" );
+	spriteFile.read( test_sprite, nSize );
+	spriteFile.close();
 
-	// Sprite sprite( (uint8_t*)test_sprite );
-	// test_sprite_ptr = &sprite;
+	Sprite<CP_FORMAT::RGBA_32BIT> sprite( (uint8_t*)test_sprite );
+	test_sprite_ptr = &sprite;
 
 	// nSize = TEXTURE_FILE_SIZE;
 	// std::ifstream textureFile;
