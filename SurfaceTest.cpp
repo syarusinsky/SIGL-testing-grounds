@@ -14,10 +14,10 @@
 
 #include <iostream>
 
-// class Font;
+class Font;
 // class Sprite;
 
-// extern Font* my_font_ptr;
+extern Font* my_font_ptr;
 // extern Sprite* test_sprite_ptr;
 // extern Texture* test_texture_ptr;
 
@@ -50,7 +50,6 @@ float incr = 0.01f;
 SurfaceTest::SurfaceTest() :
 	Surface()
 {
-	// graphics->setFont( my_font_ptr );
 }
 
 SurfaceTest::~SurfaceTest()
@@ -221,7 +220,6 @@ void SurfaceTest::draw (SoftwareGraphics<640, 480, CP_FORMAT::RGB_24BIT, NUM_COR
 		originYIncr = -0.02f;
 	}
 
-	/*
 	static float textScale = 10.0f;
 	static float textScaleIncr = -0.1f;
 	static float textX = 0.5f;
@@ -236,7 +234,6 @@ void SurfaceTest::draw (SoftwareGraphics<640, 480, CP_FORMAT::RGB_24BIT, NUM_COR
 	if ( textScale > 10.0f || textScale < 0.5f ) textScaleIncr = textScaleIncr * -1.0f;
 	if ( textX > 1.2f || textX < -0.5f) textXMov = textXMov * -1.0f;
 	if ( textY < -0.2f || textY > 1.0f ) textYMov = textYMov * -1.0f;
-	*/
 
 	/*
 	// tests all characters

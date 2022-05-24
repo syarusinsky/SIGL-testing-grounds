@@ -106,6 +106,7 @@ static void activate (GtkApplication* app, gpointer user_data)
 {
 	// create context
 	surface = new SurfaceTest();
+	surface->setFont( my_font_ptr );
 
 	// get access to pixels in framebuffer
 	FrameBuffer<SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_COLOR_FORMAT>& fb = surface->advanceFrameBuffer();
