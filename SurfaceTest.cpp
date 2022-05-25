@@ -283,33 +283,30 @@ void SurfaceTest::draw (SoftwareGraphics<640, 480, CP_FORMAT::RGB_24BIT, NUM_COR
 	static float xRotation = 0.0f;
 	static float xRotationIncr = 1.0f;
 	Matrix<4, 4> rotationMatrix = generateRotationMatrix( xRotation, xRotation * 0.5f, 0.0f );
-	for ( unsigned int cubeNum = 0; cubeNum < 40; cubeNum++ )
+	// testing how many texture triangles can be drawn without lagging
+	TriShaderData<CP_FORMAT::RGBA_32BIT> shaderData{ texArray, camera, vShader, fShader };
+	for ( Face face : cube.faces )
 	{
-		for ( Face face : cube.faces )
-		{
-			// translate to origin for rotation
-			face.vertices[0].vec -= 0.25f;
-			face.vertices[1].vec -= 0.25f;
-			face.vertices[2].vec -= 0.25f;
+		// translate to origin for rotation
+		face.vertices[0].vec -= 0.25f;
+		face.vertices[1].vec -= 0.25f;
+		face.vertices[2].vec -= 0.25f;
 
-			// rotate
-			face.vertices[0].vec = mulVector4DByMatrix4D( face.vertices[0].vec, rotationMatrix );
-			face.vertices[1].vec = mulVector4DByMatrix4D( face.vertices[1].vec, rotationMatrix );
-			face.vertices[2].vec = mulVector4DByMatrix4D( face.vertices[2].vec, rotationMatrix );
+		// rotate
+		face.vertices[0].vec = mulVector4DByMatrix4D( face.vertices[0].vec, rotationMatrix );
+		face.vertices[1].vec = mulVector4DByMatrix4D( face.vertices[1].vec, rotationMatrix );
+		face.vertices[2].vec = mulVector4DByMatrix4D( face.vertices[2].vec, rotationMatrix );
 
-			// translate away from camera
-			face.vertices[0].vec.z() += 1.5f;
-			face.vertices[1].vec.z() += 1.5f;
-			face.vertices[2].vec.z() += 1.5f;
-			// translate sideways
-			face.vertices[0].vec.x() += xTranslate;
-			face.vertices[1].vec.x() += xTranslate;
-			face.vertices[2].vec.x() += xTranslate;
+		// translate away from camera
+		face.vertices[0].vec.z() += 1.5f;
+		face.vertices[1].vec.z() += 1.5f;
+		face.vertices[2].vec.z() += 1.5f;
+		// translate sideways
+		face.vertices[0].vec.x() += xTranslate;
+		face.vertices[1].vec.x() += xTranslate;
+		face.vertices[2].vec.x() += xTranslate;
 
-			TriShaderData<CP_FORMAT::RGBA_32BIT> shaderData{ texArray, face, camera, vShader, fShader };
-
-			graphics->drawTriangleShaded( shaderData );
-		}
+		graphics->drawTriangleShaded( face, shaderData );
 	}
 
 	xTranslate += xTranslateIncr;
