@@ -18,7 +18,7 @@ class Font;
 
 extern Font* my_font_ptr;
 extern Sprite<CP_FORMAT::RGBA_32BIT>* test_sprite_ptr;
-// extern Texture* test_texture_ptr;
+extern Texture<CP_FORMAT::RGBA_32BIT>* test_texture_ptr;
 
 typedef struct square
 {
@@ -265,14 +265,16 @@ void SurfaceTest::draw (SoftwareGraphics<640, 480, CP_FORMAT::RGB_24BIT, NUM_COR
 
 	// TODO remove this once the 3D engine has a proper mesh rendering algorithm
 	// draw cube
-	/*
-	graphics->setTexture( test_texture_ptr );
-	graphics->setFragmentShader( [](Color& color, Face& face, Texture* texture, float v1Cur, float v2Cur, float v3Cur, float texCoordX,
-						float texCoordY)
-			{
-				color = texture->getColor( texCoordX, texCoordY );
-			} );
-	float aspectRatio = static_cast<float>(m_FrameBuffer->getHeight()) / static_cast<float>(m_FrameBuffer->getWidth());
+	std::array<Texture<CP_FORMAT::RGBA_32BIT>*, 5> texArray = { test_texture_ptr };
+	void (*vShader)(TriShaderData<CP_FORMAT::RGBA_32BIT>& vShaderData) = [](TriShaderData<CP_FORMAT::RGBA_32BIT>& vShaderData) {};
+	void (*fShader)(Color& colorOut, TriShaderData<CP_FORMAT::RGBA_32BIT>& fShaderData, float v1Cur, float v2Cur, float v3Cur, float texCoordX,
+			float texCoordY)
+				= [] (Color& colorOut, TriShaderData<CP_FORMAT::RGBA_32BIT>& fShaderData, float v1Cur, float v2Cur, float v3Cur,
+					float texCoordX, float texCoordY)
+					{
+						colorOut = fShaderData.textures[0]->getColor( texCoordX, texCoordY );
+					};
+	float aspectRatio = static_cast<float>(this->getHeight()) / static_cast<float>(this->getWidth());
 	Camera3D camera( 0.001f, 1000.0f, 90.0f, aspectRatio );
 	Mesh cube = createCubeMesh();
 	cube.scale( 0.5f );
@@ -304,7 +306,9 @@ void SurfaceTest::draw (SoftwareGraphics<640, 480, CP_FORMAT::RGB_24BIT, NUM_COR
 			face.vertices[1].vec.x() += xTranslate;
 			face.vertices[2].vec.x() += xTranslate;
 
-			graphics->drawTriangleShaded( face, camera );
+			TriShaderData<CP_FORMAT::RGBA_32BIT> shaderData{ texArray, face, camera, vShader, fShader };
+
+			graphics->drawTriangleShaded( shaderData );
 		}
 	}
 
@@ -322,7 +326,6 @@ void SurfaceTest::draw (SoftwareGraphics<640, 480, CP_FORMAT::RGB_24BIT, NUM_COR
 	{
 		xRotation = 0.0f;
 	}
-	*/
 
 	/* old test code to draw to a sprite
 	graphics->setFrameBuffer( &m_TestSprite );

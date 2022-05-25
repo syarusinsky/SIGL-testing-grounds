@@ -37,8 +37,8 @@ Font*        my_font_ptr = nullptr;
 char         test_sprite[SPRITE_FILE_SIZE];
 Sprite<CP_FORMAT::RGBA_32BIT>*      test_sprite_ptr = nullptr;
 
-// char         test_texture[TEXTURE_FILE_SIZE];
-// Texture*     test_texture_ptr = nullptr;
+char         test_texture[TEXTURE_FILE_SIZE];
+Texture<CP_FORMAT::RGBA_32BIT>*     test_texture_ptr = nullptr;
 
 gint draw_frame (gpointer data)
 {
@@ -159,14 +159,14 @@ int main (int argc, char **argv)
 	Sprite<CP_FORMAT::RGBA_32BIT> sprite( (uint8_t*)test_sprite );
 	test_sprite_ptr = &sprite;
 
-	// nSize = TEXTURE_FILE_SIZE;
-	// std::ifstream textureFile;
-	// textureFile.open( "./box-texture.sif" );
-	// textureFile.read( test_texture, nSize );
-	// textureFile.close();
+	nSize = TEXTURE_FILE_SIZE;
+	std::ifstream textureFile;
+	textureFile.open( "./box-texture.sif" );
+	textureFile.read( test_texture, nSize );
+	textureFile.close();
 
-	// Texture texture( (uint8_t*)test_texture );
-	// test_texture_ptr = &texture;
+	Texture<CP_FORMAT::RGBA_32BIT> texture( (uint8_t*)test_texture );
+	test_texture_ptr = &texture;
 
 	GtkApplication *app;
 	int status;
