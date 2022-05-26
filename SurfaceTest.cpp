@@ -9,8 +9,8 @@
 #endif
 #include "Sprite.hpp"
 #include "Engine3D.hpp"
-
 #include "Texture.hpp"
+#include "ObjFileLoader.hpp"
 
 #include <iostream>
 
@@ -53,6 +53,15 @@ SurfaceTest::SurfaceTest() :
 
 SurfaceTest::~SurfaceTest()
 {
+}
+
+void SurfaceTest::loadMesh (const std::string& filePath)
+{
+	ObjFileLoader loader;
+	if ( ! loader.createMeshFromFile(m_Mesh, filePath) )
+	{
+		std::cout << "Failed to load obj file" << std::endl;
+	}
 }
 
 void SurfaceTest::draw (SoftwareGraphics<640, 480, CP_FORMAT::RGB_24BIT, NUM_CORES>* graphics)
@@ -261,7 +270,6 @@ void SurfaceTest::draw (SoftwareGraphics<640, 480, CP_FORMAT::RGB_24BIT, NUM_COR
 	if ( spriteScale > 1.5f || spriteScale < 0.2f ) spriteScaleIncr = spriteScaleIncr * -1.0f;
 	if ( spriteX > 0.9f || spriteX < -0.1f ) spriteXMov = spriteXMov * -1.0f;
 	if ( spriteY > 0.7f || spriteY < -0.2f ) spriteYMov = spriteYMov * -1.0f;
-	if ( spriteRotDegrees > 1023 || spriteRotDegrees < -2000 ) spriteRotIncr * -1;
 
 	// TODO remove this once the 3D engine has a proper mesh rendering algorithm
 	// draw cube
@@ -292,7 +300,7 @@ void SurfaceTest::draw (SoftwareGraphics<640, 480, CP_FORMAT::RGB_24BIT, NUM_COR
 		face.vertices[1].vec -= 0.25f;
 		face.vertices[2].vec -= 0.25f;
 
-		// rotate
+		// // rotate
 		face.vertices[0].vec = mulVector4DByMatrix4D( face.vertices[0].vec, rotationMatrix );
 		face.vertices[1].vec = mulVector4DByMatrix4D( face.vertices[1].vec, rotationMatrix );
 		face.vertices[2].vec = mulVector4DByMatrix4D( face.vertices[2].vec, rotationMatrix );
