@@ -284,7 +284,7 @@ void SurfaceTest::draw (SoftwareGraphics<640, 480, CP_FORMAT::RGB_24BIT, NUM_COR
 					};
 	float aspectRatio = static_cast<float>(this->getHeight()) / static_cast<float>(this->getWidth());
 	Camera3D camera( 0.001f, 1000.0f, 90.0f, aspectRatio );
-	Mesh cube = createCubeMesh();
+	Mesh cube = m_Mesh;
 	cube.scale( 0.5f );
 	static float xTranslate = 0.0f;
 	static float xTranslateIncr = 0.01f;
@@ -295,20 +295,15 @@ void SurfaceTest::draw (SoftwareGraphics<640, 480, CP_FORMAT::RGB_24BIT, NUM_COR
 	TriShaderData<CP_FORMAT::RGBA_32BIT> shaderData{ texArray, camera, vShader, fShader };
 	for ( Face face : cube.faces )
 	{
-		// translate to origin for rotation
-		face.vertices[0].vec -= 0.25f;
-		face.vertices[1].vec -= 0.25f;
-		face.vertices[2].vec -= 0.25f;
-
 		// // rotate
 		face.vertices[0].vec = mulVector4DByMatrix4D( face.vertices[0].vec, rotationMatrix );
 		face.vertices[1].vec = mulVector4DByMatrix4D( face.vertices[1].vec, rotationMatrix );
 		face.vertices[2].vec = mulVector4DByMatrix4D( face.vertices[2].vec, rotationMatrix );
 
 		// translate away from camera
-		face.vertices[0].vec.z() += 1.5f;
-		face.vertices[1].vec.z() += 1.5f;
-		face.vertices[2].vec.z() += 1.5f;
+		face.vertices[0].vec.z() += 2.5f;
+		face.vertices[1].vec.z() += 2.5f;
+		face.vertices[2].vec.z() += 2.5f;
 		// translate sideways
 		face.vertices[0].vec.x() += xTranslate;
 		face.vertices[1].vec.x() += xTranslate;
