@@ -291,6 +291,7 @@ void SurfaceTest::draw (SoftwareGraphics<640, 480, CP_FORMAT::RGB_24BIT, NUM_COR
 	static float xRotation = 0.0f;
 	static float xRotationIncr = 1.0f;
 	Matrix<4, 4> rotationMatrix = generateRotationMatrix( xRotation, xRotation * 0.5f, 0.0f );
+	// Matrix<4, 4> rotationMatrix = generateRotationMatrix( 0.0f, 180.0f, 0.0f );
 	// testing how many texture triangles can be drawn without lagging
 	TriShaderData<CP_FORMAT::RGBA_32BIT> shaderData{ texArray, camera, vShader, fShader };
 	for ( Face face : cube.faces )
@@ -304,6 +305,7 @@ void SurfaceTest::draw (SoftwareGraphics<640, 480, CP_FORMAT::RGB_24BIT, NUM_COR
 		face.vertices[0].vec.z() += 2.5f;
 		face.vertices[1].vec.z() += 2.5f;
 		face.vertices[2].vec.z() += 2.5f;
+
 		// translate sideways
 		face.vertices[0].vec.x() += xTranslate;
 		face.vertices[1].vec.x() += xTranslate;
@@ -311,6 +313,39 @@ void SurfaceTest::draw (SoftwareGraphics<640, 480, CP_FORMAT::RGB_24BIT, NUM_COR
 
 		graphics->drawTriangleShaded( face, shaderData );
 	}
+
+	/*
+	// TODO remove after testing
+	Face face;
+	face.vertices[0].vec.x() = 0.4f;
+	face.vertices[1].vec.x() = 0.8f;
+	face.vertices[2].vec.x() = 0.5f;
+	face.vertices[0].vec.y() = 0.2f;
+	face.vertices[1].vec.y() = 0.6f;
+	face.vertices[2].vec.y() = 0.9f;
+	face.vertices[0].texCoords.x() = 0.0f;
+	face.vertices[0].texCoords.y() = 0.0f;
+	face.vertices[1].texCoords.x() = 0.0f;
+	face.vertices[1].texCoords.y() = 1.0f;
+	face.vertices[2].texCoords.x() = 1.0f;
+	face.vertices[2].texCoords.y() = 1.0f;
+	// // rotate
+	face.vertices[0].vec = mulVector4DByMatrix4D( face.vertices[0].vec, rotationMatrix );
+	face.vertices[1].vec = mulVector4DByMatrix4D( face.vertices[1].vec, rotationMatrix );
+	face.vertices[2].vec = mulVector4DByMatrix4D( face.vertices[2].vec, rotationMatrix );
+
+	// translate away from camera
+	face.vertices[0].vec.z() += 1.0f;
+	face.vertices[1].vec.z() += 1.0f;
+	face.vertices[2].vec.z() += 1.0f;
+
+	// translate sideways
+	face.vertices[0].vec.y() -= xTranslate;
+	face.vertices[1].vec.y() -= xTranslate;
+	face.vertices[2].vec.y() -= xTranslate;
+
+	graphics->drawTriangleShaded( face, shaderData );
+	*/
 
 	xTranslate += xTranslateIncr;
 	if ( xTranslate >= 3.0f )
