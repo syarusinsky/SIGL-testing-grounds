@@ -3,9 +3,9 @@
 
 #include "Surface.hpp"
 
-#define NUM_CORES 1
+#define NUM_THREADS 6
 
-class SurfaceTest : public Surface<640, 480, CP_FORMAT::RGB_24BIT, NUM_CORES>
+class SurfaceTest : public Surface<640, 480, CP_FORMAT::RGB_24BIT, NUM_THREADS>
 {
 	public:
 		SurfaceTest();
@@ -13,7 +13,7 @@ class SurfaceTest : public Surface<640, 480, CP_FORMAT::RGB_24BIT, NUM_CORES>
 
 		void loadMesh (const std::string& filePath);
 
-		void draw(SoftwareGraphics<640, 480, CP_FORMAT::RGB_24BIT, NUM_CORES>* graphics) override;
+		void draw(SoftwareGraphics<640, 480, CP_FORMAT::RGB_24BIT, NUM_THREADS>* graphics) override;
 
 	private:
 		Mesh m_Mesh;

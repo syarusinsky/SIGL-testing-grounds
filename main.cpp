@@ -162,7 +162,7 @@ int main (int argc, char **argv)
 
 	nSize = TEXTURE_FILE_SIZE;
 	std::ifstream textureFile;
-	textureFile.open( "./box-texture.sif" );
+	textureFile.open( "./box-texture_test.sif" );
 	textureFile.read( test_texture, nSize );
 	textureFile.close();
 
