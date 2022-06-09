@@ -37,8 +37,11 @@ Font*        my_font_ptr = nullptr;
 char         test_sprite[SPRITE_FILE_SIZE];
 Sprite<CP_FORMAT::RGBA_32BIT>*      test_sprite_ptr = nullptr;
 
-char         test_texture[TEXTURE_FILE_SIZE];
-Texture<CP_FORMAT::RGBA_32BIT>*     test_texture_ptr = nullptr;
+char         test_texture1[TEXTURE_FILE_SIZE];
+Texture<CP_FORMAT::RGBA_32BIT>*     test_texture1_ptr = nullptr;
+
+char         test_texture2[TEXTURE_FILE_SIZE];
+Texture<CP_FORMAT::RGBA_32BIT>*     test_texture2_ptr = nullptr;
 
 gint draw_frame (gpointer data)
 {
@@ -107,7 +110,8 @@ static void activate (GtkApplication* app, gpointer user_data)
 	// create context
 	surface = new SurfaceTest();
 	surface->setFont( my_font_ptr );
-	surface->loadMesh( "cube.obj" );
+	surface->loadMesh1( "eric.obj" );
+	surface->loadMesh2( "sphere.obj" );
 
 	// get access to pixels in framebuffer
 	FrameBuffer<SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_COLOR_FORMAT>& fb = surface->advanceFrameBuffer();
@@ -161,13 +165,22 @@ int main (int argc, char **argv)
 	test_sprite_ptr = &sprite;
 
 	nSize = TEXTURE_FILE_SIZE;
-	std::ifstream textureFile;
-	textureFile.open( "./box-texture_test.sif" );
-	textureFile.read( test_texture, nSize );
-	textureFile.close();
+	std::ifstream textureFile1;
+	textureFile1.open( "./eric.sif" );
+	textureFile1.read( test_texture1, nSize );
+	textureFile1.close();
 
-	Texture<CP_FORMAT::RGBA_32BIT> texture( (uint8_t*)test_texture );
-	test_texture_ptr = &texture;
+	nSize = TEXTURE_FILE_SIZE;
+	std::ifstream textureFile2;
+	textureFile2.open( "./box-texture.sif" );
+	textureFile2.read( test_texture2, nSize );
+	textureFile2.close();
+
+	Texture<CP_FORMAT::RGBA_32BIT> texture1( (uint8_t*)test_texture1 );
+	test_texture1_ptr = &texture1;
+
+	Texture<CP_FORMAT::RGBA_32BIT> texture2( (uint8_t*)test_texture2 );
+	test_texture2_ptr = &texture2;
 
 	GtkApplication *app;
 	int status;

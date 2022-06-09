@@ -18,7 +18,8 @@ class Font;
 
 extern Font* my_font_ptr;
 extern Sprite<CP_FORMAT::RGBA_32BIT>* test_sprite_ptr;
-extern Texture<CP_FORMAT::RGBA_32BIT>* test_texture_ptr;
+extern Texture<CP_FORMAT::RGBA_32BIT>* test_texture1_ptr;
+extern Texture<CP_FORMAT::RGBA_32BIT>* test_texture2_ptr;
 
 typedef struct square
 {
@@ -55,10 +56,19 @@ SurfaceTest::~SurfaceTest()
 {
 }
 
-void SurfaceTest::loadMesh (const std::string& filePath)
+void SurfaceTest::loadMesh1 (const std::string& filePath)
 {
 	ObjFileLoader loader;
-	if ( ! loader.createMeshFromFile(m_Mesh, filePath) )
+	if ( ! loader.createMeshFromFile(m_Mesh1, filePath) )
+	{
+		std::cout << "Failed to load obj file" << std::endl;
+	}
+}
+
+void SurfaceTest::loadMesh2 (const std::string& filePath)
+{
+	ObjFileLoader loader;
+	if ( ! loader.createMeshFromFile(m_Mesh2, filePath) )
 	{
 		std::cout << "Failed to load obj file" << std::endl;
 	}
@@ -273,7 +283,8 @@ void SurfaceTest::draw (SoftwareGraphics<640, 480, CP_FORMAT::RGB_24BIT, NUM_THR
 
 	// TODO remove this once the 3D engine has a proper mesh rendering algorithm
 	// draw cube
-	std::array<Texture<CP_FORMAT::RGBA_32BIT>*, 5> texArray = { test_texture_ptr };
+	std::array<Texture<CP_FORMAT::RGBA_32BIT>*, 5> texArray1 = { test_texture1_ptr };
+	std::array<Texture<CP_FORMAT::RGBA_32BIT>*, 5> texArray2 = { test_texture2_ptr };
 	void (*vShader)(TriShaderData<CP_FORMAT::RGBA_32BIT>& vShaderData) = [](TriShaderData<CP_FORMAT::RGBA_32BIT>& vShaderData) {};
 	void (*fShader)(Color& colorOut, TriShaderData<CP_FORMAT::RGBA_32BIT>& fShaderData, float v1Cur, float v2Cur, float v3Cur, float texCoordX,
 			float texCoordY)
@@ -281,36 +292,76 @@ void SurfaceTest::draw (SoftwareGraphics<640, 480, CP_FORMAT::RGB_24BIT, NUM_THR
 					float texCoordX, float texCoordY)
 					{
 						colorOut = fShaderData.textures[0]->getColor( texCoordX, texCoordY );
+						// Color color;
+						// color.m_R = v1Cur;
+						// color.m_G = v2Cur;
+						// color.m_B = v3Cur;
+						// colorOut = color;
 					};
 	float aspectRatio = static_cast<float>(this->getHeight()) / static_cast<float>(this->getWidth());
-	Camera3D camera( 0.001f, 1000.0f, 90.0f, aspectRatio );
-	Mesh cube = m_Mesh;
-	cube.scale( 0.5f );
+	Camera3D camera( 0.1f, 10.0f, 60.0f, aspectRatio );
+	Mesh model1 = m_Mesh1;
+	Mesh model2 = m_Mesh2;
+	model1.scale( 0.5f );
 	static float xTranslate = 0.0f;
 	static float xTranslateIncr = 0.01f;
 	static float xRotation = 0.0f;
 	static float xRotationIncr = 1.0f;
-	Matrix<4, 4> rotationMatrix = generateRotationMatrix( xRotation, xRotation * 0.5f, 0.0f );
+	Matrix<4, 4> rotationMatrix1 = generateRotationMatrix( 180.0f, xRotation, 0.0f );
+	Matrix<4, 4> rotationMatrix2 = generateRotationMatrix( xRotation, xRotation * 0.5f, 0.0f );
+	// Matrix<4, 4> rotationMatrix = generateRotationMatrix( xRotation, 50.0f, 0.0f );
 	Color color;
-	TriShaderData<CP_FORMAT::RGBA_32BIT> shaderData{ texArray, camera, color, vShader, fShader };
-	for ( Face face : cube.faces )
+	TriShaderData<CP_FORMAT::RGBA_32BIT> shaderData1{ texArray1, camera, color, vShader, fShader };
+	TriShaderData<CP_FORMAT::RGBA_32BIT> shaderData2{ texArray2, camera, color, vShader, fShader };
+	static unsigned int lookAtFaceNum = 0;
+	unsigned int currentFace = 0;
+	for ( Face face : model1.faces )
 	{
-		// // rotate
-		face.vertices[0].vec = mulVector4DByMatrix4D( face.vertices[0].vec, rotationMatrix );
-		face.vertices[1].vec = mulVector4DByMatrix4D( face.vertices[1].vec, rotationMatrix );
-		face.vertices[2].vec = mulVector4DByMatrix4D( face.vertices[2].vec, rotationMatrix );
+		// if ( currentFace == lookAtFaceNum )
+		// {
+			// rotate
+			face.vertices[0].vec = mulVector4DByMatrix4D( face.vertices[0].vec, rotationMatrix1 );
+			face.vertices[1].vec = mulVector4DByMatrix4D( face.vertices[1].vec, rotationMatrix1 );
+			face.vertices[2].vec = mulVector4DByMatrix4D( face.vertices[2].vec, rotationMatrix1 );
 
-		// translate away from camera
-		face.vertices[0].vec.z() += 2.5f;
-		face.vertices[1].vec.z() += 2.5f;
-		face.vertices[2].vec.z() += 2.5f;
+			// translate away from camera
+			face.vertices[0].vec.z() += 1.0f;
+			face.vertices[1].vec.z() += 1.0f;
+			face.vertices[2].vec.z() += 1.0f;
 
-		// translate sideways
-		face.vertices[0].vec.x() += xTranslate;
-		face.vertices[1].vec.x() += xTranslate;
-		face.vertices[2].vec.x() += xTranslate;
+			// translate sideways
+			// face.vertices[0].vec.x() += xTranslate;
+			// face.vertices[1].vec.x() += xTranslate;
+			// face.vertices[2].vec.x() += xTranslate;
 
-		graphics->drawTriangleShaded( face, shaderData );
+			graphics->drawTriangleShaded( face, shaderData1 );
+			// std::cout << "lookAtFaceNum: " << std::to_string(lookAtFaceNum) << std::endl;
+		// }
+
+		currentFace++;
+	}
+	lookAtFaceNum++;
+
+	for ( Face face : model2.faces )
+	{
+			// rotate
+			face.vertices[0].vec = mulVector4DByMatrix4D( face.vertices[0].vec, rotationMatrix2 );
+			face.vertices[1].vec = mulVector4DByMatrix4D( face.vertices[1].vec, rotationMatrix2 );
+			face.vertices[2].vec = mulVector4DByMatrix4D( face.vertices[2].vec, rotationMatrix2 );
+
+			// translate away from camera
+			face.vertices[0].vec.z() += 5.0f;
+			face.vertices[1].vec.z() += 5.0f;
+			face.vertices[2].vec.z() += 5.0f;
+
+			// translate sideways
+			face.vertices[0].vec.x() += xTranslate;
+			face.vertices[1].vec.x() += xTranslate;
+			face.vertices[2].vec.x() += xTranslate;
+
+			graphics->drawTriangleShaded( face, shaderData2 );
+
+		currentFace++;
 	}
 
 	xTranslate += xTranslateIncr;
@@ -338,4 +389,6 @@ void SurfaceTest::draw (SoftwareGraphics<640, 480, CP_FORMAT::RGB_24BIT, NUM_THR
 	graphics->setFrameBuffer( m_FrameBuffer );
 	graphics->drawSprite( 0.5f, 0.5f, m_TestSprite );
 	*/
+
+	// graphics->drawDepthBuffer( camera );
 }
