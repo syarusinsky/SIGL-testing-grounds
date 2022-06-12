@@ -3,7 +3,7 @@
 
 #include "Surface.hpp"
 
-#define NUM_THREADS 6
+#define NUM_THREADS 1
 
 class SurfaceTest : public Surface<640, 480, CP_FORMAT::RGB_24BIT, NUM_THREADS>
 {

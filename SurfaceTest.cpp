@@ -298,49 +298,38 @@ void SurfaceTest::draw (SoftwareGraphics<640, 480, CP_FORMAT::RGB_24BIT, NUM_THR
 						// color.m_B = v3Cur;
 						// colorOut = color;
 					};
-	float aspectRatio = static_cast<float>(this->getHeight()) / static_cast<float>(this->getWidth());
-	Camera3D camera( 0.1f, 10.0f, 60.0f, aspectRatio );
+	float aspectRatio = static_cast<float>(this->getWidth()) / static_cast<float>(this->getHeight());
+	Camera3D camera( 0.01f, 10.0f, 60.0f, aspectRatio );
 	Mesh model1 = m_Mesh1;
 	Mesh model2 = m_Mesh2;
-	model1.scale( 0.5f );
 	static float xTranslate = 0.0f;
 	static float xTranslateIncr = 0.01f;
 	static float xRotation = 0.0f;
 	static float xRotationIncr = 1.0f;
 	Matrix<4, 4> rotationMatrix1 = generateRotationMatrix( 180.0f, xRotation, 0.0f );
 	Matrix<4, 4> rotationMatrix2 = generateRotationMatrix( xRotation, xRotation * 0.5f, 0.0f );
-	// Matrix<4, 4> rotationMatrix = generateRotationMatrix( xRotation, 50.0f, 0.0f );
 	Color color;
 	TriShaderData<CP_FORMAT::RGBA_32BIT> shaderData1{ texArray1, camera, color, vShader, fShader };
 	TriShaderData<CP_FORMAT::RGBA_32BIT> shaderData2{ texArray2, camera, color, vShader, fShader };
-	static unsigned int lookAtFaceNum = 0;
-	unsigned int currentFace = 0;
 	for ( Face face : model1.faces )
 	{
-		// if ( currentFace == lookAtFaceNum )
-		// {
-			// rotate
-			face.vertices[0].vec = mulVector4DByMatrix4D( face.vertices[0].vec, rotationMatrix1 );
-			face.vertices[1].vec = mulVector4DByMatrix4D( face.vertices[1].vec, rotationMatrix1 );
-			face.vertices[2].vec = mulVector4DByMatrix4D( face.vertices[2].vec, rotationMatrix1 );
+		// rotate
+		face.vertices[0].vec = mulVector4DByMatrix4D( face.vertices[0].vec, rotationMatrix1 );
+		face.vertices[1].vec = mulVector4DByMatrix4D( face.vertices[1].vec, rotationMatrix1 );
+		face.vertices[2].vec = mulVector4DByMatrix4D( face.vertices[2].vec, rotationMatrix1 );
 
-			// translate away from camera
-			face.vertices[0].vec.z() += 1.0f;
-			face.vertices[1].vec.z() += 1.0f;
-			face.vertices[2].vec.z() += 1.0f;
+		// translate away from camera
+		face.vertices[0].vec.z() += 0.5f;
+		face.vertices[1].vec.z() += 0.5f;
+		face.vertices[2].vec.z() += 0.5f;
 
-			// translate sideways
-			// face.vertices[0].vec.x() += xTranslate;
-			// face.vertices[1].vec.x() += xTranslate;
-			// face.vertices[2].vec.x() += xTranslate;
+		// translate up and down
+		face.vertices[0].vec.y() -= xTranslate * 0.5f;
+		face.vertices[1].vec.y() -= xTranslate * 0.5f;
+		face.vertices[2].vec.y() -= xTranslate * 0.5f;
 
-			graphics->drawTriangleShaded( face, shaderData1 );
-			// std::cout << "lookAtFaceNum: " << std::to_string(lookAtFaceNum) << std::endl;
-		// }
-
-		currentFace++;
+		graphics->drawTriangleShaded( face, shaderData1 );
 	}
-	lookAtFaceNum++;
 
 	for ( Face face : model2.faces )
 	{
@@ -350,9 +339,9 @@ void SurfaceTest::draw (SoftwareGraphics<640, 480, CP_FORMAT::RGB_24BIT, NUM_THR
 			face.vertices[2].vec = mulVector4DByMatrix4D( face.vertices[2].vec, rotationMatrix2 );
 
 			// translate away from camera
-			face.vertices[0].vec.z() += 5.0f;
-			face.vertices[1].vec.z() += 5.0f;
-			face.vertices[2].vec.z() += 5.0f;
+			face.vertices[0].vec.z() += 4.0f;
+			face.vertices[1].vec.z() += 4.0f;
+			face.vertices[2].vec.z() += 4.0f;
 
 			// translate sideways
 			face.vertices[0].vec.x() += xTranslate;
@@ -360,8 +349,6 @@ void SurfaceTest::draw (SoftwareGraphics<640, 480, CP_FORMAT::RGB_24BIT, NUM_THR
 			face.vertices[2].vec.x() += xTranslate;
 
 			graphics->drawTriangleShaded( face, shaderData2 );
-
-		currentFace++;
 	}
 
 	xTranslate += xTranslateIncr;
