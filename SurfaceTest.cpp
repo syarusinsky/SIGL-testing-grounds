@@ -319,9 +319,9 @@ void SurfaceTest::draw (SoftwareGraphics<640, 480, CP_FORMAT::RGB_24BIT, NUM_THR
 		face.vertices[2].vec = mulVector4DByMatrix4D( face.vertices[2].vec, rotationMatrix1 );
 
 		// translate away from camera
-		face.vertices[0].vec.z() += 0.5f;
-		face.vertices[1].vec.z() += 0.5f;
-		face.vertices[2].vec.z() += 0.5f;
+		face.vertices[0].vec.z() += 2.5f;
+		face.vertices[1].vec.z() += 2.5f;
+		face.vertices[2].vec.z() += 2.5f;
 
 		// translate up and down
 		face.vertices[0].vec.y() -= xTranslate * 0.5f;
@@ -339,9 +339,9 @@ void SurfaceTest::draw (SoftwareGraphics<640, 480, CP_FORMAT::RGB_24BIT, NUM_THR
 			face.vertices[2].vec = mulVector4DByMatrix4D( face.vertices[2].vec, rotationMatrix2 );
 
 			// translate away from camera
-			face.vertices[0].vec.z() += 4.0f;
-			face.vertices[1].vec.z() += 4.0f;
-			face.vertices[2].vec.z() += 4.0f;
+			face.vertices[0].vec.z() += 8.0f;
+			face.vertices[1].vec.z() += 8.0f;
+			face.vertices[2].vec.z() += 8.0f;
 
 			// translate sideways
 			face.vertices[0].vec.x() += xTranslate;
