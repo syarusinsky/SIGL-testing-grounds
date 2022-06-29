@@ -111,7 +111,7 @@ static void activate (GtkApplication* app, gpointer user_data)
 	surface = new SurfaceTest();
 	surface->setFont( my_font_ptr );
 	surface->loadMesh1( "eric.obj" );
-	surface->loadMesh2( "sphere.obj" );
+	surface->loadMesh2( "cube.obj" );
 
 	// get access to pixels in framebuffer
 	FrameBuffer<SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_COLOR_FORMAT>& fb = surface->advanceFrameBuffer();

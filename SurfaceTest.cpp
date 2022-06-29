@@ -287,36 +287,39 @@ void SurfaceTest::draw (SoftwareGraphics<640, 480, CP_FORMAT::RGB_24BIT, NUM_THR
 	std::array<Texture<CP_FORMAT::RGBA_32BIT>*, 5> texArray2 = { test_texture2_ptr };
 	void (*vShader)(TriShaderData<CP_FORMAT::RGBA_32BIT>& vShaderData) = [](TriShaderData<CP_FORMAT::RGBA_32BIT>& vShaderData) {};
 	void (*fShader)(Color& colorOut, TriShaderData<CP_FORMAT::RGBA_32BIT>& fShaderData, float v1Cur, float v2Cur, float v3Cur, float texCoordX,
-			float texCoordY)
+			float texCoordY, float lightAmnt)
 				= [] (Color& colorOut, TriShaderData<CP_FORMAT::RGBA_32BIT>& fShaderData, float v1Cur, float v2Cur, float v3Cur,
-					float texCoordX, float texCoordY)
+					float texCoordX, float texCoordY, float lightAmnt)
 					{
-						colorOut = fShaderData.textures[0]->getColor( texCoordX, texCoordY );
+						colorOut = fShaderData.textures[0]->getColor( texCoordX, texCoordY ) * lightAmnt;
 					};
 	float aspectRatio = static_cast<float>(this->getWidth()) / static_cast<float>(this->getHeight());
 	Camera3D camera( 0.01f, 10.0f, 60.0f, aspectRatio );
 	Mesh model1 = m_Mesh1;
 	Mesh model2 = m_Mesh2;
+	model1.transformMat = generateIdentityMatrix();
+	model2.transformMat = generateIdentityMatrix();
 	static float xTranslate = 0.0f;
 	static float xTranslateIncr = 0.01f;
 	static float xRotation = 0.0f;
 	static float xRotationIncr = 1.0f;
-	Matrix<4, 4> rotationMatrix1 = generateRotationMatrix( 180.0f, xRotation, 0.0f );
-	Matrix<4, 4> rotationMatrix2 = generateRotationMatrix( xRotation, xRotation * 0.5f, 0.0f );
-	TriShaderData<CP_FORMAT::RGBA_32BIT> shaderData1{ texArray1, camera, Color(), vShader, fShader };
-	TriShaderData<CP_FORMAT::RGBA_32BIT> shaderData2{ texArray2, camera, Color(), vShader, fShader };
+	TriShaderData<CP_FORMAT::RGBA_32BIT> shaderData1{ texArray1, camera, Color(), nullptr, vShader, fShader };
+	TriShaderData<CP_FORMAT::RGBA_32BIT> shaderData2{ texArray2, camera, Color(), nullptr, vShader, fShader };
 	model1.rotate( 180.0f, xRotation, 0.0f );
 	model2.rotate( xRotation, xRotation * 0.5f, 0.0f );
 	model1.translate( 0.0f, 0.0f, 2.5f );
 	model2.translate( 0.0f, 0.0f, 8.0f );
 	model1.translate( 0.0f, xTranslate * 0.5f, 0.0f );
-	model2.translate( xTranslate, 0.0f, 0.0f );
+	model2.translate( xTranslate * 2.0f, 0.0f, 0.0f );
 	for ( Face face : model1.faces )
 	{
 		// TODO transforms should be applied in a pipeline
-		face.vertices[0].vec = mulVector4DByMatrix4D( face.vertices[0].vec, model1.transformMat );
-		face.vertices[1].vec = mulVector4DByMatrix4D( face.vertices[1].vec, model1.transformMat );
-		face.vertices[2].vec = mulVector4DByMatrix4D( face.vertices[2].vec, model1.transformMat );
+		face.vertices[0].vec = face.vertices[0].vec * model1.transformMat;
+		face.vertices[1].vec = face.vertices[1].vec * model1.transformMat;
+		face.vertices[2].vec = face.vertices[2].vec * model1.transformMat;
+		face.vertices[0].normal = face.vertices[0].normal * model1.transformMat;
+		face.vertices[1].normal = face.vertices[1].normal * model1.transformMat;
+		face.vertices[2].normal = face.vertices[2].normal * model1.transformMat;
 
 		graphics->drawTriangleShaded( face, shaderData1 );
 	}
@@ -324,9 +327,12 @@ void SurfaceTest::draw (SoftwareGraphics<640, 480, CP_FORMAT::RGB_24BIT, NUM_THR
 	for ( Face face : model2.faces )
 	{
 		// TODO transforms should be applied in a pipeline
-		face.vertices[0].vec = mulVector4DByMatrix4D( face.vertices[0].vec, model2.transformMat );
-		face.vertices[1].vec = mulVector4DByMatrix4D( face.vertices[1].vec, model2.transformMat );
-		face.vertices[2].vec = mulVector4DByMatrix4D( face.vertices[2].vec, model2.transformMat );
+		face.vertices[0].vec = face.vertices[0].vec * model2.transformMat;
+		face.vertices[1].vec = face.vertices[1].vec * model2.transformMat;
+		face.vertices[2].vec = face.vertices[2].vec * model2.transformMat;
+		face.vertices[0].normal = face.vertices[0].normal * model2.transformMat;
+		face.vertices[1].normal = face.vertices[1].normal * model2.transformMat;
+		face.vertices[2].normal = face.vertices[2].normal * model2.transformMat;
 
 		graphics->drawTriangleShaded( face, shaderData2 );
 	}
